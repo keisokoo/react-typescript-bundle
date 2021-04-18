@@ -17,8 +17,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.scss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
         test: /\.(js|jsx)/,
         exclude: /node_modules/,
+        // exclude: /node_modules\/(?!(axios|@redux-saga|redux-logger))/,
         use: ['babel-loader'],
       },
       {

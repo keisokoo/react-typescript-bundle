@@ -1,7 +1,12 @@
 import React from 'react'
-
+import UsePromiseSample from './UsePromiseSample'
 const App = () => {
-  return <div>app</div>
+  React.useEffect(() => {}, [])
+  return (
+    <div>
+      <UsePromiseSample />
+    </div>
+  )
 }
 
 export default App
