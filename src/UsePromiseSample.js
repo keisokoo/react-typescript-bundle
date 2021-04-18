@@ -1,6 +1,8 @@
 import React from 'react'
 import usePromise from './hooks/usePromise'
-
+import styles from './styles/test.module.scss'
+import classNames from 'classNames/bind'
+const cx = classNames.bind(styles)
 const wait = () => {
   // 3초 후에 끝나는 프로미스를 반환
   return new Promise((resolve) =>
@@ -14,7 +16,7 @@ const UsePromiseSample = () => {
   if (error) return <div>에러 발생!</div>
   if (!resolved) return null
 
-  return <div>{resolved}</div>
+  return <div className={cx('wrapper', 'inverted')}>{resolved}</div>
 }
 
 export default UsePromiseSample
