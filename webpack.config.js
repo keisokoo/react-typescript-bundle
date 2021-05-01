@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     filename: 'bundle.js',
     sourceMapFilename: 'bundle.js.map',
@@ -14,6 +14,9 @@ module.exports = {
     index: 'index.html',
     port: 9000,
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.scss', '.json'],
+  },
   module: {
     rules: [
       {
@@ -21,10 +24,15 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
-        test: /\.(js|jsx)/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         // exclude: /node_modules\/(?!(axios|@redux-saga|redux-logger))/,
         use: ['babel-loader'],
+      },
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: ['ts-loader'],
       },
       {
         test: /\.html$/,
