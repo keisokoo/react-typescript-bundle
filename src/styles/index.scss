@@ -1,5 +1,5 @@
-@import url('./_variables.scss');
-
+@import '~normalize.css';
+@import './_variables.scss';
 body {
-  background-color: #ccc;
+  background-color: $background;
 }
