@@ -2,8 +2,8 @@ import React from 'react'
 const App = () => {
   React.useEffect(() => {}, [])
   return (
-    <div>
-        Hello World
+    <div id="main">
+      <header>Hello World</header>
     </div>
   )
 }
