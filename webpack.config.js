@@ -6,10 +6,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
+const node_env = process.env.NODE_ENV ?? 'development'
+
 module.exports = {
+  mode: node_env,
   entry: './src/index.tsx',
   optimization: {
-    minimize: process.env.NODE_ENV === 'production',
     minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   output: {
@@ -38,7 +40,7 @@ module.exports = {
       {
         test: /\.scss$/i,
         use: [
-          process.env.NODE_ENV === 'production'
+          node_env === 'production'
             ? MiniCssExtractPlugin.loader
             : 'style-loader',
           'css-loader',
@@ -79,9 +81,8 @@ module.exports = {
       extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
     new CleanWebpackPlugin(),
-    ...(process.env.NODE_ENV === 'production'
+    ...(node_env === 'production'
       ? [new MiniCssExtractPlugin({ filename: `[name].[contenthash].css` })]
       : []),
   ],
-  mode: 'development',
 }
