@@ -27,8 +27,11 @@ install eslint-config-prettier
 (webpack .ver > 5)
 
 html-webpack-plugin
+
 eslint-webpack-plugin
 
-mini-css-extract-plugin - .css size
-css-minimizer-webpack-plugin - .css size
-terser-webpack-plugin - .js size
+mini-css-extract-plugin
+
+css-minimizer-webpack-plugin
+
+terser-webpack-plugin
