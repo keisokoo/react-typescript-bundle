@@ -24,6 +24,7 @@ module.exports = {
     open: true,
     compress: true,
     quiet: true,
+    hot: true,
     overlay: false,
     clientLogLevel: 'none',
     watchContentBase: true,
