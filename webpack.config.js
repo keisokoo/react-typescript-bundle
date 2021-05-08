@@ -58,12 +58,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: { minimize: node_env === 'production' },
-          },
-        ],
+        loader: 'html-loader',
       },
       {
         test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
@@ -80,7 +75,18 @@ module.exports = {
       extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
     ...(node_env === 'production'
-      ? [new MiniCssExtractPlugin({ filename: `[name].[contenthash].css` })]
+      ? [
+          new MiniCssExtractPlugin({
+            filename:
+              node_env === 'development'
+                ? '[name].css'
+                : '[name].[contenthash].css',
+            chunkFilename:
+              node_env === 'development'
+                ? '[id].css'
+                : '[id].[contenthash].css',
+          }),
+        ]
       : []),
   ],
 }
