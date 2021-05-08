@@ -3,13 +3,14 @@ const HtmlWebPackPlugin = require('html-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
   entry: './src/index.tsx',
   optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()],
+    minimize: process.env.NODE_ENV === 'production',
+    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   output: {
     filename: 'app.[contenthash].js',
@@ -18,7 +19,13 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
+    historyApiFallback: true,
     open: true,
+    compress: true,
+    quiet: true,
+    overlay: false,
+    clientLogLevel: 'none',
+    watchContentBase: true,
     contentBase: path.resolve('./build'),
     index: 'index.html',
     port: 3000,

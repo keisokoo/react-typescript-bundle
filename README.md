@@ -32,4 +32,5 @@ eslint-webpack-plugin
 clean-webpack-plugin - build 할때 기존폴더 삭제
 
 mini-css-extract-plugin - .css size
+css-minimizer-webpack-plugin - .css size
 terser-webpack-plugin - .js size
