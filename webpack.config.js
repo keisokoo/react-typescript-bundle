@@ -1,12 +1,19 @@
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
   entry: './src/index.tsx',
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
   output: {
-    filename: 'bundle.js',
-    sourceMapFilename: 'bundle.js.map',
+    filename: 'app.[contenthash].js',
+    sourceMapFilename: 'app.[contenthash].js.map',
     path: path.resolve(__dirname + '/build'),
   },
   devtool: 'source-map',
@@ -23,12 +30,17 @@ module.exports = {
     rules: [
       {
         test: /\.scss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          process.env.NODE_ENV === 'production'
+            ? MiniCssExtractPlugin.loader
+            : 'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        // exclude: /node_modules\/(?!(axios|@redux-saga|redux-logger))/,
         use: ['babel-loader'],
       },
       {
@@ -59,6 +71,10 @@ module.exports = {
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
+    new CleanWebpackPlugin(),
+    ...(process.env.NODE_ENV === 'production'
+      ? [new MiniCssExtractPlugin({ filename: `[name].[contenthash].css` })]
+      : []),
   ],
   mode: 'development',
 }
