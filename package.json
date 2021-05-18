@@ -2,14 +2,14 @@
   "name": "react-typescript-bundle",
   "version": "1.0.0",
   "author": "keisokoo",
-  "url" : "https://github.com/keisokoo/react-typescript-bundle",
+  "url": "https://github.com/keisokoo/react-typescript-bundle",
   "email": "keisokoo@gmail.com",
   "description": "",
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve",
-    "build": "cross-env NODE_ENV=production webpack"
+    "start": "webpack serve --mode=development",
+    "build": "webpack --mode=production"
   },
   "eslintConfig": {
     "extends": [
@@ -34,7 +34,6 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "core-js": "^3.11.1",
-    "cross-env": "^7.0.3",
     "css-loader": "^5.2.4",
     "css-minimizer-webpack-plugin": "^2.0.0",
     "eslint": "^7.26.0",

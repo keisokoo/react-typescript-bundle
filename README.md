@@ -10,8 +10,6 @@ prettier
 
 sass
 
-cross-env
-
 ### if you want update eslint package
 
 see,
