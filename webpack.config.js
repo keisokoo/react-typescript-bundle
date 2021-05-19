@@ -14,8 +14,8 @@ module.exports = {
     minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   output: {
-    filename: 'app.[contenthash].js',
-    sourceMapFilename: 'app.[contenthash].js.map',
+    filename: '[name].[contenthash].js',
+    sourceMapFilename: '[name].[contenthash].js.map',
     path: path.resolve(__dirname + '/build'),
   },
   devtool: 'source-map',
