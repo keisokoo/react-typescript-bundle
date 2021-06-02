@@ -23,10 +23,10 @@ module.exports = {
     historyApiFallback: true,
     open: true,
     compress: true,
-    quiet: true,
+    // quiet: true,
     hot: true,
     overlay: false,
-    clientLogLevel: 'none',
+    // clientLogLevel: 'silent',
     watchContentBase: true,
     contentBase: path.resolve('./build'),
     index: 'index.html',
@@ -38,7 +38,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss$/i,
+        test: /\.(css|scss)$/i,
         use: [
           node_env === 'production'
             ? MiniCssExtractPlugin.loader
