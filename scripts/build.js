@@ -1,18 +1,12 @@
-process.env.BABEL_ENV = 'production'
-process.env.NODE_ENV = 'production'
-process.on('unhandledRejection', (err) => {
-  throw err
-})
-
 const config = require('../webpack.config')
 const fs = require('fs-extra')
 const bfj = require('bfj')
 const path = require('path')
 const webpack = require('webpack')
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
+const formatWebpackMessages = require('./formatMessage')
 const chalk = require('react-dev-utils/chalk')
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter')
-const printHostingInstructions = require('react-dev-utils/printHostingInstructions')
+
 const printBuildError = require('react-dev-utils/printBuildError')
 const compiler = webpack(config)
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild
@@ -53,6 +47,14 @@ function build(previousFileSizes) {
           stats.toJson({ all: false, warnings: true, errors: true })
         )
       }
+      if (messages.errors.length) {
+        // Only keep the first error. Others are often indicative
+        // of the same problem, but confuse the reader with noise.
+        if (messages.errors.length > 1) {
+          messages.errors.length = 1
+        }
+        return reject(new Error(messages.errors.join('\n\n')))
+      }
       if (
         process.env.CI &&
         (typeof process.env.CI !== 'string' ||
@@ -66,14 +68,6 @@ function build(previousFileSizes) {
           )
         )
         return reject(new Error(messages.warnings.join('\n\n')))
-      }
-      if (messages.errors.length) {
-        // Only keep the first error. Others are often indicative
-        // of the same problem, but confuse the reader with noise.
-        if (messages.errors.length > 1) {
-          messages.errors.length = 1
-        }
-        return reject(new Error(messages.errors.join('\n\n')))
       }
       const resolveArgs = {
         stats,

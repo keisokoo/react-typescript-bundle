@@ -1,3 +1,9 @@
+process.env.BABEL_ENV = 'production'
+process.env.NODE_ENV = 'production'
+process.on('unhandledRejection', (err) => {
+  throw err
+})
+
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
@@ -11,12 +17,20 @@ module.exports = {
   mode: node_env,
   entry: './src/index.tsx',
   optimization: {
+    minimize: node_env === 'production',
     minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   output: {
-    filename: '[name].[contenthash].js',
+    filename:
+      node_env === 'production'
+        ? 'static/js/[name].[contenthash:8].js'
+        : node_env === 'development' && 'static/js/bundle.js',
     sourceMapFilename: '[name].[contenthash].js.map',
     path: path.resolve(__dirname + '/build'),
+    chunkFilename:
+      node_env === 'production'
+        ? 'static/js/[name].[contenthash:8].chunk.js'
+        : node_env === 'development' && 'static/js/[name].chunk.js',
   },
   devtool: node_env === 'production' ? false : 'source-map',
   devServer: {
@@ -67,10 +81,31 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebPackPlugin({
-      template: './public/index.html',
-      filename: 'index.html',
-    }),
+    new HtmlWebPackPlugin(
+      Object.assign(
+        {},
+        {
+          inject: true,
+          template: 'public/index.html',
+        },
+        node_env === 'production'
+          ? {
+              minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true,
+              },
+            }
+          : undefined
+      )
+    ),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
