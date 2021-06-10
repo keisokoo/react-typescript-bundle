@@ -11,38 +11,36 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const node_env = process.env.NODE_ENV ?? 'development'
+const isDev = process.env.NODE_ENV === 'development'
+const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  mode: node_env,
+  mode: process.env.NODE_ENV,
   entry: './src/index.tsx',
   optimization: {
-    minimize: node_env === 'production',
+    minimize: isProd,
     minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   output: {
-    filename:
-      node_env === 'production'
-        ? 'static/js/[name].[contenthash:8].js'
-        : node_env === 'development' && 'static/js/bundle.js',
+    filename: isProd
+      ? 'static/js/[name].[contenthash:8].js'
+      : isDev && 'static/js/bundle.js',
     sourceMapFilename: '[name].[contenthash].js.map',
     path: path.resolve(__dirname + '/build'),
-    chunkFilename:
-      node_env === 'production'
-        ? 'static/js/[name].[contenthash:8].chunk.js'
-        : node_env === 'development' && 'static/js/[name].chunk.js',
+    chunkFilename: isProd
+      ? 'static/js/[name].[contenthash:8].chunk.js'
+      : isDev && 'static/js/[name].chunk.js',
   },
-  devtool: node_env === 'production' ? false : 'source-map',
+  devtool: isProd ? false : 'source-map',
   devServer: {
     historyApiFallback: true,
     open: true,
-    compress: true,
     hot: true,
     client: {
       overlay: false,
     },
     watchFiles: ['public/**/*'],
-    static: [path.resolve('./build')],
+    static: [path.resolve('./public')],
     port: 3000,
   },
   resolve: {
@@ -53,9 +51,7 @@ module.exports = {
       {
         test: /\.(css|scss)$/i,
         use: [
-          node_env === 'production'
-            ? MiniCssExtractPlugin.loader
-            : 'style-loader',
+          isProd ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
           'sass-loader',
         ],
@@ -88,7 +84,7 @@ module.exports = {
           inject: true,
           template: 'public/index.html',
         },
-        node_env === 'production'
+        isProd
           ? {
               minify: {
                 removeComments: true,
@@ -109,17 +105,11 @@ module.exports = {
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
-    ...(node_env === 'production'
+    ...(isProd
       ? [
           new MiniCssExtractPlugin({
-            filename:
-              node_env === 'development'
-                ? '[name].css'
-                : '[name].[contenthash].css',
-            chunkFilename:
-              node_env === 'development'
-                ? '[id].css'
-                : '[id].[contenthash].css',
+            filename: isDev ? '[name].css' : '[name].[contenthash].css',
+            chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
           }),
         ]
       : []),
