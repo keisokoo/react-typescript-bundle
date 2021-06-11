@@ -1,6 +1,6 @@
-# React 기본 번들 with 타입스크립트
+# React 기본 번들 with 타입스크립트, webpack5
 
-react, typescript, webpack, babel
+react17, typescript4.3, webpack5, babel7
 
 normalize.css
 

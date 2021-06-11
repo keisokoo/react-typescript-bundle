@@ -1,19 +1,24 @@
 const path = require('path')
+const webpack = require('webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
+
+process.env.NODE_ENV = process.env.NODE_ENV ?? 'development'
+
+const isDev = process.env.NODE_ENV === 'development'
+const isProd = process.env.NODE_ENV === 'production'
+
 const getClientEnvironment = require('./scripts/env')
 const env = getClientEnvironment()
 
-const node_env = process.env.NODE_ENV ?? 'development'
-const isDev = node_env === 'development'
-const isProd = node_env === 'production'
-
 module.exports = {
-  mode: node_env,
+  mode: process.env.NODE_ENV,
   entry: './src/index.tsx',
   optimization: {
     minimizer: [
@@ -80,16 +85,18 @@ module.exports = {
       template: './public/index.html',
     }),
     new InterpolateHtmlPlugin(HtmlWebPackPlugin, env.raw),
+    isProd && new ModuleNotFoundPlugin('.'),
+    isDev && new CaseSensitivePathsPlugin(),
+    // isProd && new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.DefinePlugin(env.stringified),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
+      formatter: require.resolve('react-dev-utils/eslintFormatter'),
     }),
-    ...(isProd
-      ? [
-          new MiniCssExtractPlugin({
-            filename: isDev ? '[name].css' : '[name].[contenthash].css',
-            chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
-          }),
-        ]
-      : []),
-  ],
+    isProd &&
+      new MiniCssExtractPlugin({
+        filename: isDev ? '[name].css' : '[name].[contenthash].css',
+        chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
+      }),
+  ].filter(Boolean),
 }
