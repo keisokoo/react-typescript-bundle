@@ -56,7 +56,15 @@ module.exports = {
         test: /\.(css|scss)$/i,
         use: [
           isProd ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: {
+                compileType: 'icss',
+              },
+            },
+          },
           'sass-loader',
         ],
       },

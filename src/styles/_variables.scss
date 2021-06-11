@@ -1,2 +1,54 @@
-$background: #f8f8f8;
-$text: #2d2c2c;
+@use "sass:map";
+
+$grayscale: (
+  'black': (
+    'default': #202224,
+    'lifht': #3c424d,
+  ),
+  'blue-gray': (
+    'default': #aab2c0,
+    'dark': #626d81,
+    'light': #aab2c0,
+    'lighter': #e9ecf1,
+  ),
+  'background-gray': #f8f9fb,
+  'white-off': #fff,
+);
+$colour: (
+  'primary': (
+    'default': #17bab0,
+    'dark': #007e86,
+    'light': #abe0dd,
+    'lighter': #f2fbfa,
+  ),
+  'secondary': (
+    'default': #576b94,
+    'dark': #2d3f62,
+    'light': #8fa1c4,
+    'lighter': #dde7f4,
+  ),
+  'accent': (
+    'default': #ef4a67,
+    'dark': #d9304e,
+    'lighter': #fff3f3,
+  ),
+  'warning': (
+    'default': #fdb953,
+    'dark': #c16835,
+    'lighter': #fffce3,
+  ),
+  'success': (
+    'default': #3ca1ff,
+    'dark': #0c62b1,
+    'lighter': #e9f4ff,
+  ),
+);
+$theme: map.deep-merge($grayscale, $colour);
+
+@each $name, $colors in $colour {
+  @each $key, $color in $colors {
+    .#{$name + if($key == 'default','','-' + $key)} {
+      color: $color;
+    }
+  }
+}
