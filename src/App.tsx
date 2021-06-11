@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import Pie from './Pie'
 import themes, { defaults } from './themes'
 
