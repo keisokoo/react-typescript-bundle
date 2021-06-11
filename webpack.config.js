@@ -1,9 +1,3 @@
-process.env.BABEL_ENV = 'production'
-process.env.NODE_ENV = 'production'
-process.on('unhandledRejection', (err) => {
-  throw err
-})
-
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
@@ -11,36 +5,33 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const isDev = process.env.NODE_ENV === 'development'
-const isProd = process.env.NODE_ENV === 'production'
+const node_env = process.env.NODE_ENV ?? 'development'
+const isDev = node_env === 'development'
+const isProd = node_env === 'production'
 
 module.exports = {
-  mode: process.env.NODE_ENV,
+  mode: node_env,
   entry: './src/index.tsx',
   optimization: {
-    minimize: isProd,
     minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   output: {
-    filename: isProd
-      ? 'static/js/[name].[contenthash:8].js'
-      : isDev && 'static/js/bundle.js',
+    filename: '[name].[contenthash].js',
     sourceMapFilename: '[name].[contenthash].js.map',
     path: path.resolve(__dirname + '/build'),
-    chunkFilename: isProd
-      ? 'static/js/[name].[contenthash:8].chunk.js'
-      : isDev && 'static/js/[name].chunk.js',
   },
-  devtool: isProd ? false : 'source-map',
+  devtool: 'source-map',
   devServer: {
     historyApiFallback: true,
     open: true,
+    compress: true,
+    // quiet: true,
     hot: true,
-    client: {
-      overlay: false,
-    },
-    watchFiles: ['public/**/*'],
-    static: [path.resolve('./public')],
+    overlay: false,
+    clientLogLevel: 'silent',
+    watchContentBase: true,
+    contentBase: path.resolve('./public'),
+    index: 'index.html',
     port: 3000,
   },
   resolve: {
@@ -77,31 +68,10 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebPackPlugin(
-      Object.assign(
-        {},
-        {
-          inject: true,
-          template: 'public/index.html',
-        },
-        isProd
-          ? {
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true,
-              },
-            }
-          : undefined
-      )
-    ),
+    new HtmlWebPackPlugin({
+      template: './public/index.html',
+      filename: 'index.html',
+    }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
