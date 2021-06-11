@@ -1,3 +1,8 @@
+process.env.BABEL_ENV = 'production'
+process.env.NODE_ENV = 'production'
+
+require('./env')
+
 const config = require('../webpack.config')
 const fs = require('fs-extra')
 const bfj = require('bfj')
@@ -13,6 +18,7 @@ const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024
+
 function copyPublicFolder() {
   fs.copySync('public', 'build', {
     dereference: true,

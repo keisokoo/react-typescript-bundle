@@ -4,6 +4,9 @@ const ESLintPlugin = require('eslint-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
+const getClientEnvironment = require('./scripts/env')
+const env = getClientEnvironment()
 
 const node_env = process.env.NODE_ENV ?? 'development'
 const isDev = node_env === 'development'
@@ -13,14 +16,19 @@ module.exports = {
   mode: node_env,
   entry: './src/index.tsx',
   optimization: {
-    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+      new CssMinimizerPlugin(),
+    ],
   },
   output: {
     filename: '[name].[contenthash].js',
     sourceMapFilename: '[name].[contenthash].js.map',
     path: path.resolve(__dirname + '/build'),
   },
-  devtool: 'source-map',
+  devtool: isDev ? 'cheap-module-source-map' : false,
   devServer: {
     historyApiFallback: true,
     open: true,
@@ -70,8 +78,8 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       template: './public/index.html',
-      filename: 'index.html',
     }),
+    new InterpolateHtmlPlugin(HtmlWebPackPlugin, env.raw),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
