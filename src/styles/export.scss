@@ -1,9 +1,10 @@
-$primary-color: #fe4e5e;
-$background-color: #fefefe;
-$padding: 124px;
+@use 'sass:map';
+@import './_variables.scss';
+
+$blackc: map.get($theme, 'black', default);
+$blue-gray: map.get($theme, 'blue-gray', 'default');
 
 :export {
-  primaryColor: $primary-color;
-  backgroundColor: $background-color;
-  padding: $padding;
+  blackc: $blackc;
+  blue-gray: $blue-gray;
 }

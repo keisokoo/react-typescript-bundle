@@ -31,7 +31,6 @@ const PieComponent = () => {
         ))}
         <Label
           content={(props: any) => {
-            console.log('props', props)
             const {
               viewBox: { cx, cy },
             } = props

@@ -1,10 +1,12 @@
 import React from 'react'
 import Pie from './Pie'
-import vars from './styles/export.scss'
+import themes, { defaults } from './themes'
 
-console.log('vars', vars)
 const App = () => {
-  React.useEffect(() => {}, [])
+  React.useEffect(() => {
+    console.log('themes', themes)
+    console.log('defaults', defaults)
+  }, [])
   return (
     <div id="app">
       <Pie />
