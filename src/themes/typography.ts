@@ -8,19 +8,21 @@ interface TypographyCSStoStyled {
 }
 interface FontFace {
   size: number | string
-  weight: number | string
-  line: number | string
-  spacing: number | string
+  weight?: number | string
+  height: number | string
+  spacing?: number | string
+  color?: string
 }
-const font = ({ size, weight, line, spacing }: FontFace) => `
-    font-weight: ${weight || 400};
-    font-size: ${size || '14px'};
-    letter-spacing: ${spacing || '-0.3%'};
-    line-height: ${line || '20px'}
+const font = ({ size, weight, height, spacing, color }: FontFace) => `
+    font-weight: ${weight ?? 400};
+    font-size: ${size ?? '14px'};
+    letter-spacing: ${spacing ?? '-0.3%'};
+    line-height: ${height ?? '20px'};
+    ${color ? `color: ${color};` : ``}
 `
 
 const DisplayLarge = css`
-  ${font({ size: '26px', weight: 400, line: '34px', spacing: '-0.3%' })}
+  ${font({ size: '26px', weight: 400, height: '34px', spacing: '-0.3%' })}
 `
 const DisplayLargeBold = css`
   ${DisplayLarge}

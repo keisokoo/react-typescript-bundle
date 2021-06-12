@@ -1,17 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
 import Pie from './Pie'
-import themes, { defaults } from './themes'
 
 const App = () => {
-  React.useEffect(() => {
-    console.log('themes', themes)
-    console.log('defaults', defaults)
-  }, [])
+  React.useEffect(() => {}, [])
   return (
     <div id="app">
       <Pie />
-      <div className="success">success</div>
+      <div className="success">s!uccess</div>
       <div className="success-dark">success-dark</div>
     </div>
   )

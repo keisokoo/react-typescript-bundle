@@ -4,6 +4,7 @@ logs
 **/*.backup.*
 **/*.back.*
 .idea/
+package-lock.json
 
 node_modules
 build
