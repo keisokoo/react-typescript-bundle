@@ -1,6 +1,4 @@
-@use "sass:map";
-
-$grayscale: (
+$theme: (
   'black': (
     'default': #202224,
     'light': #3c424d,
@@ -11,10 +9,12 @@ $grayscale: (
     'light': #aab2c0,
     'lighter': #e9ecf1,
   ),
-  'background-gray': #f8f9fb,
-  'white-off': #fff,
-);
-$colour: (
+  'background-gray': (
+    'default': #f8f9fb,
+  ),
+  'white-off': (
+    'default': #ffffff,
+  ),
   'primary': (
     'default': #17bab0,
     'dark': #007e86,
@@ -35,7 +35,7 @@ $colour: (
   'warning': (
     'default': #fdb953,
     'dark': #c16835,
-    'lighter': #fffce3,
+    'lighter': #fff9e3,
   ),
   'success': (
     'default': #3ca1ff,
@@ -43,11 +43,10 @@ $colour: (
     'lighter': #e9f4ff,
   ),
 );
-$theme: map.deep-merge($grayscale, $colour);
 
-@each $name, $colors in $colour {
+@each $name, $colors in $theme {
   @each $key, $color in $colors {
-    .#{$name + if($key == 'default','','-' + $key)} {
+    .#{$name + '-' + $key} {
       color: $color;
     }
   }

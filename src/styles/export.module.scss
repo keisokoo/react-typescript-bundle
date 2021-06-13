@@ -1,0 +1,13 @@
+@import './_variables.scss';
+@import './stylesheets/sass-json-export.scss';
+
+$json: json-encode($theme);
+
+:export {
+  json: $json;
+  @each $name, $colors in $theme {
+    @each $key, $color in $colors {
+      #{$name + '-' + $key}: #{$color};
+    }
+  }
+}

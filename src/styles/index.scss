@@ -9,7 +9,7 @@ body,
   height: 100%;
 }
 body {
-  background-color: map.get($theme, 'background-gray');
+  background-color: map.get($theme, 'background-gray', 'default');
   -webkit-font-smoothing: antialiased;
   font-size: calc(10px + 0.33vw);
   color: map.get($theme, 'black', 'default');
