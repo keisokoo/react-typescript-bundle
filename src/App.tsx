@@ -2,6 +2,7 @@ import React from 'react'
 import Pie from './Pie'
 import { color } from './themes'
 import styles from './styles/export.module.scss'
+import { ReactComponent as Info } from './assets/svg/Info.svg'
 
 const App = () => {
   React.useEffect(() => {
@@ -10,8 +11,9 @@ const App = () => {
   }, [])
   return (
     <div id="app">
+      <Info />
       <Pie />
-      <div className="success">s!uccess</div>
+      <div className="success-default">success</div>
       <div className="success-dark">success-dark</div>
     </div>
   )

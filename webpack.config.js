@@ -11,6 +11,19 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
 
 process.env.NODE_ENV = process.env.NODE_ENV ?? 'development'
 
+const hasJsxRuntime = (() => {
+  if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
+    return false
+  }
+
+  try {
+    require.resolve('react/jsx-runtime')
+    return true
+  } catch (e) {
+    return false
+  }
+})()
+
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -69,9 +82,41 @@ module.exports = {
         ],
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|mjs|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        loader: require.resolve('babel-loader'),
+        options: {
+          customize: require.resolve(
+            'babel-preset-react-app/webpack-overrides'
+          ),
+          presets: [
+            [
+              require.resolve('babel-preset-react-app'),
+              {
+                runtime: hasJsxRuntime ? 'automatic' : 'classic',
+              },
+            ],
+          ],
+
+          plugins: [
+            [
+              require.resolve('babel-plugin-named-asset-import'),
+              {
+                loaderMap: {
+                  svg: {
+                    ReactComponent:
+                      '@svgr/webpack?-svgo,+titleProp,+ref![path]',
+                  },
+                },
+              },
+            ],
+          ].filter(Boolean),
+          // 설정하면 리빌드 빠름 ./node_modules/.cache/babel-loader/
+          cacheDirectory: true,
+          // See #6846 캐시 압축을 끄는게 성능에 유리할거라 생각
+          cacheCompression: false,
+          compact: isProd,
+        },
       },
       {
         test: /\.(ts|tsx)$/,
