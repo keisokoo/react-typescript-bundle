@@ -2,7 +2,7 @@ import React from 'react'
 import Pie from './Pie'
 import { color } from './themes'
 import styles from './styles/export.module.scss'
-import { ReactComponent as Info } from './assets/svg/Info.svg'
+import { Info } from './assets/svg'
 
 const App = () => {
   React.useEffect(() => {
